@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container2
+    environment:
+      MYSQL_DATABASE: salesdatabasePD  
+      MYSQL_USER: admin 
+      MYSQL_PASSWORD: Bucket26
+    ports:
+      - "3306:3306"
+    networks:
+      - ola_network
+
+
+  springboot:
+    build: .
+    container_name: classic_business-model_app
+    ports:
+      - "8978:8978"
+    depends_on:
+      - mysql
+    networks:
+      - ola_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-pd.cj9rshqboeoo.us-west-1.rds.amazonaws.com:3306/salesdatabasePD
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: Bucket26
+
+networks:
+  ola_network:
+    driver: bridge
